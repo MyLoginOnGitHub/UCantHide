@@ -6,7 +6,7 @@ import gzip
 # Parsing component of Logalyzer.  Compiled in Python 2.6
 #
 
-# log object 
+# log object
 # Stuck into a dictionary by user:Log, where log houses
 # logs, fails, successes, logged IPs, and commands used
 class Log:
@@ -49,7 +49,7 @@ def ParseUsr(line):
 
 # parse an IP from a line
 def ParseIP(line):
-	ip = re.search(r'(\bfrom\s)(\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b)', line)
+	ip = re.search(r'(\bfrom\s)(\b((\s*((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\s*)|(\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*)\b))', line)
 	if ip is not None:
 		return ip.group(2)
 
@@ -61,7 +61,7 @@ def ParseDate(line):
 
 # parse a command from a line
 def ParseCmd(line):
-	# parse command to end of line 
+	# parse command to end of line
 	cmd = re.search(r'(\bCOMMAND=)(.+?$)', line)
 	if cmd is not None:
 		return cmd.group(2)
@@ -86,11 +86,11 @@ def ParseLogs(LOG):
 		# match a login
 		if "Accepted password for" in line:
 			usr = ParseUsr(line)
-			
+
 			# add 'em if they don't exist
 			if not usr in logs:
 				logs[usr] = Log(usr)
-			
+
 			ip = ParseIP(line)
 			# set info
 			if not ip in logs[usr].ips:
@@ -105,14 +105,14 @@ def ParseLogs(LOG):
 
 			if not usr in logs:
 				logs[usr] = Log(usr)
-				
+
 			ip = ParseIP(line)
 
 			if not ip in logs[usr].ips:
 				logs[usr].ips.append(ip)
 			logs[usr].fail_logs.append(line.rstrip('\n'))
 			logs[usr].logs.append(line.rstrip('\n'))
-			
+
 		# match failed auth
 		elif ":auth): authentication failure;" in line:
 			# so there are three flavors of authfail we care about;
@@ -128,7 +128,7 @@ def ParseLogs(LOG):
 					logs[usr] = Log(usr)
 				logs[usr].ips.append(ParseIP(line))
 			# parse sudo/su fails
-			else:	
+			else:
 				if not usr in logs:
 					logs[usr] = Log(usr)
 			logs[usr].fail_logs.append(line.rstrip('\n'))
@@ -139,7 +139,7 @@ def ParseLogs(LOG):
 			usr = ParseUsr(line)
 			if not usr in logs:
 				logs[usr] = Log(usr)
-	
+
 			cmd = ParseCmd(line)
 			# append the command if it isn't there already
 			if cmd is not None:
