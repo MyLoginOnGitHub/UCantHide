@@ -40,7 +40,7 @@ class Log:
 # parse user from various lines
 def ParseUsr(line):
     usr = None
-    if "Accepted password" in line:
+    if "Accepted password" in line or "Accepted publickey for" in line:
         usr = re.search(r'(\bfor\s)(\w+)', line)
     elif "sudo:" in line:
         usr = re.search(r'(sudo:\s+)(\w+)', line)
@@ -99,6 +99,18 @@ def ParseLogs(LOG):
             usr = ParseUsr(line)
 
             # add 'em if they don't exist
+            if not usr in logs:
+                logs[usr] = Log(usr)
+
+            ip = ParseIP(line)
+            # set info
+            if not ip in logs[usr].ips:
+                logs[usr].ips.append(ip)
+            logs[usr].succ_logs.append(line.rstrip('\n'))
+            logs[usr].logs.append(line.rstrip('\n'))
+
+        elif "Accepted publickey for" in line:
+            usr = ParseUsr(line)
             if not usr in logs:
                 logs[usr] = Log(usr)
 
