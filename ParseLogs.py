@@ -76,8 +76,8 @@ def ParseLogs(LOG):
 	try:
 		f = gzip.open(LOG, 'r') if '.gz' in LOG else open(LOG, 'r')
 		log = f.read()
-	except Exception, e:
-		print '[-] Error opening \'%s\': %s'%(LOG,e)
+	except Exception as e:
+		print('[-] Error opening \'%s\': %s' % (LOG, e))
 		return None
 	finally:
 		if f is not None: f.close()
