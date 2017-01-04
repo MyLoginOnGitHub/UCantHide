@@ -1,7 +1,7 @@
 logalyzer
 =========
 
-Logalyzer is a script I wrote to make looking through the auth logs neater.  It can parse users, IP addresses, failures, etc.
+Logalyzer is a script written make looking through the auth logs neater.  It can parse users, IP addresses, failures, etc.
 
 Some examples:
 
