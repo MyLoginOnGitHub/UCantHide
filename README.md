@@ -3,6 +3,9 @@ logalyzer
 
 Logalyzer is a script written make looking through the auth logs neater.  It can parse users, IP addresses, failures, etc.
 
+* Originally written by [hatRiot](https://github.com/hatRiot).
+* Additional work by [yoiang](https://github.com/yoiang).
+
 Some examples:
 
 <pre>
