@@ -34,7 +34,7 @@ def parse_line_of_auth_log_file(line: str, year: int)->Event:
         #  For example, empty line could be the first line of file after command `echo > /var/log/auth.log`
         #  Later it probably should to return some special type of Event in this case. Now just return None.
         return None
-    
+
     application_str = line.split()[4]
     assert application_str.endswith(":")
     application_str = application_str[:-1]
@@ -50,7 +50,7 @@ def parse_line_of_auth_log_file(line: str, year: int)->Event:
     dt = datetime.strptime(ParseDate(line), "%b %d %H:%M:%S").replace(year=year)
     if "session opened for user" in line:
         description = EventDescription.SESSION_OPENED
-    elif "session closed for user":
+    elif "session closed for user" in line:
         description = EventDescription.SESSION_CLOSED
     else:
         return None
